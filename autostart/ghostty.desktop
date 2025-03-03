@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ghostty
+Type=Application
+Comment=Terminal emulator
+Icon=com.mitchellh.ghostty
+Categories=System;TerminalEmulator;
+Exec=start_win_at 10 10 ghostty --window-width=100 --window-height=50 --theme="Adwaita Dark" --clipboard-paste-protection=false --copy-on-select=true
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true

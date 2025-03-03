@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+#
+# start_win_at requires the https://github.com/ickyicky/window-calls extension
+# run like:
+# > start_win_at 10 10 ghostty --window-width=100 --window-height=50 --theme="Adwaita Dark"
+#
+if [ $# -lt 3 ]; then
+	echo "usage: $0 <x> <y> <command> <args>"
+	exit 1
+fi
+
+# wait for extension to be avail on startup
+WINDOW_CALL_EXT="window-calls@domandoman.xyz"
+/usr/bin/gnome-extensions info $WINDOW_CALL_EXT | grep 'Enabled: Yes' 
+if [ $? -ne 0 ]; then
+	echo "extension missing: $WINDOW_CALL_EXT"
+	exit 1
+fi
+while [ true ]; do
+	/usr/bin/gnome-extensions info $WINDOW_CALL_EXT | grep 'State: ACTIVE' 
+	if [ $? -ne 0 ]; then
+		if [ "$retry" -ge 10 ]; then
+			echo "extension not active: $WINDOW_CALL_EXT"
+			exit 1
+		fi
+		sleep 1
+		retry=$((retry+1))
+	else 
+		break
+	fi
+done
+
+GNOME_WINDOW_CALL="gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/Windows --method org.gnome.Shell.Extensions.Windows"
+X=$1; shift
+Y=$1; shift
+ORG="$*"
+CMD=$1; shift
+
+echo "CMD: $ORG"
+
+# unescape cmd arguments like --themes="Adwaita Dark", "${arg[@]}" will escape again
+while [ "$#" -gt 0 ]; do
+	i=${#arg[@]}
+	arg[i]=`printf '%b' "$1"` # unescape
+	shift
+done
+
+echo "ESC: ${arg[@]}"
+
+$CMD "${arg[@]}" &
+PID=$! # pid of started process
+
+echo ">> PID: $PID"
+while [ "$WID" == "" ]; do
+        sleep 0.05 # sleep to prevent busy loop
+
+        # check if the process is still running
+	if [ ! -d /proc/$PID/ ]; then
+		echo "exec failed: $ORG"
+		exit 1
+        fi
+        # query window id from pid
+	# support unescape for echo "('test',)" or echo "(\"test\",)"
+	WID=$($GNOME_WINDOW_CALL.List | python3 -c "import sys; a=eval(sys.stdin.read()); print (a[0])" | jq ".[] | select(.pid==$PID) | .id")
+	echo ">> WID: $WID, $PID"
+done
+
+$GNOME_WINDOW_CALL.Move $WID $X $Y
