@@ -73,14 +73,14 @@ Allow window positioning for gtk4 startup applications
 ------------------------------------------------------
 The gtk4 runtime does not support to set the window position anymore.
 - gtk4 is modelled on Wayland, which (unlike X11) does not expose toplevel positions to clients.
-- There is no longer a way to do this in gtk4, all window management is done through the window manager.
-  The window manager positions top level windows by its own strategy (to avoid some security risks).
-- The gtk_window_move() API from gtk3 does not work under Wayland, and it has been removed in gtk4.
+- there is no longer a way to do this in gtk4, all window management is done through the window manager.
+  the window manager positions top level windows by its own strategy (to avoid some security risks).
+- the gtk_window_move() API from gtk3 does not work under Wayland, and it has been removed in gtk4.
   - [gtk_window_move](https://docs.gtk.org/gtk3/method.Window.move.html)
   - [Adapt to GdkWindow API changes](https://docs.gtk.org/gtk4/migrating-3to4.html#adapt-to-gdkwindow-api-changes)
   - [Adapt to GtkWindow API changes](https://docs.gtk.org/gtk4/migrating-3to4.html#adapt-to-gtkwindow-api-changes)
-- This type of operation is only possible through manipulation via the GNOME Shell.
-- The geometry option like '--geometry=100x50+10+10' of older X11 applications will ignore the X/Y-position.
+- this type of operation is only possible through manipulation via the GNOME Shell.
+- the geometry option like `--geometry=100x50+10+10` of older X11 applications will ignore the X/Y-position.
 
 The [Windows Calls](https://github.com/ickyicky/window-calls) extension provides access to the
 Windows.Move API of the GNOME Shell, and can be called via [D-Bus](https://en.wikipedia.org/wiki/D-Bus) messages.
@@ -101,23 +101,39 @@ nt (a[0])' | jq '.[] | select(.wm_class_instance=="ghostty")'
 $ gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/Windows --method org.gnome.Shell.Extensions.Windows.Move 3149279314 10 10
 ```
 It is very useful to have an option to set the position of startup windows.
-- here is a simple [start_win_at](scripts/start_win_at) shell script, that takes the
-  application name and parameters as argument, and can be called from the autostart folder.
-  ```
-  $ start_win_at 10 10 ghostty --window-width=100 --window-height=50 --theme="Adwaita Dark"
-  ```
-- the script works for any application opening a single Window and has to
-  1) wait for the Window Calls extension to be available on startup,
-  2) start the application,
-  3) find the window id as soon as the window is displayed, and
-  4) move the window to the requested position.
+Here is a simple [start_win_at](scripts/start_win_at) shell script, that takes the
+window position, the application name and parameters as argument, and can be called
+from the autostart folder.
+```
+$ start_win_at 10 10 ghostty --window-width=100 --window-height=50 --theme="Adwaita Dark"
+```
+The script works for any application opening a single Window and has to
+1) wait for the Window Calls extension to be available on startup,
+2) start the application,
+3) find the window id as soon as the window is displayed, and
+4) move the window to the requested position.
 
-- note: there are extensions like [Another Window Session Manager](https://extensions.gnome.org/extension/4709/another-window-session-manager/)
-  that can restore window size and positions, but this is not the same like a clean startup configuration.
+Note: There are extensions like [Another Window Session Manager](https://extensions.gnome.org/extension/4709/another-window-session-manager/)
+that can restore window size and positions, but this is not the same like a clean startup configuration.
 
-To run an application when a GNOME session starts, a script like [ghostty.desktop](autostart/ghostty.desktop)
+To run an application when a GNOME session starts, a script like [terminal1.desktop](autostart/terminal1.desktop)
+has to be placed in the `.config/autostart` folder of the home directory. The command itself must be avaible in the shell `PATH`.
+
+Note: It is also possible to manage startup-applications with the [gnome-tweaks](https://gitlab.gnome.org/GNOME/gnome-tweaks) tool.
+But on GNOME 4 gnome-tweaks has some issues and sometimes overrides old entries.
+
+Workaround for broken gtk3 window resize
+----------------------------------------
+Old GNOME 3 gtk3 apps are still supported in the GNOME 4 environment.
+But in the Ubuntu 24.04 Xorg session the gtk3 windows are not resizable after
+startup. This is a known issue and can be resolved by the command:
+```
+$ pkill -HUP mutter-x11-fram
+```
+see: [Mutter on X11 with Gnome 46, some windows no shadows, not resizable](https://gitlab.gnome.org/GNOME/mutter/-/issues/3417)
+
+The script [fix_gtk3_win_resize](scripts/fix_gtk3_win_resize) waits for Mutter to be
+available before the `SIGHUP` is send. To run this script when a GNOME session starts,
+the autostart script [fix_gtk3_win_resize.desktop](autostart/fix_gtk3_win_resize.desktop)
 has to be placed in the `.config/autostart` folder of the home directory.
-- the command itself must be avaible in the shell `PATH`.
-- note: it is also possible to manage startup-applications with the [gnome-tweaks](https://gitlab.gnome.org/GNOME/gnome-tweaks) tool.
-  But on GNOME 4 gnome-tweaks has some issues and sometimes overrides old entries.
 

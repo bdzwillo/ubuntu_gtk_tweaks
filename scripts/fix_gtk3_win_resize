@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#
+# fix_gtk3_window_resize
+#
+while [ true ]; do
+	pgrep mutter-x11-fram
+	if [ $? -ne 0 ]; then
+		if [ "$retry" -ge 10 ]; then
+			echo "mutter-x11-fram not found"
+			exit 1
+		fi
+		sleep 0.5
+		retry=$((retry+1))
+	else 
+		break
+	fi
+done
+
+pkill -HUP mutter-x11-fram
+

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=fix_gtk3_win_resize
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=Fix gtk3 window resize
+Name=Fix gtk3 window resize
+Comment[en_US]=
+Comment=
