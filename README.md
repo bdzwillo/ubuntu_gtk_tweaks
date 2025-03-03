@@ -85,8 +85,7 @@ The gtk4 runtime does not support to set the window position anymore.
 The [Windows Calls](https://github.com/ickyicky/window-calls) extension provides access to the
 Windows.Move API of the GNOME Shell, and can be called via [D-Bus](https://en.wikipedia.org/wiki/D-Bus) messages.
 ```
-$ gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/Windows --method org.gnome.Shell.Extensions.Windows.List | python3 -c 'import sys; a=eval(sys.stdin.read()); pri
-nt (a[0])' | jq '.[] | select(.wm_class_instance=="ghostty")'
+$ gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell/Extensions/Windows --method org.gnome.Shell.Extensions.Windows.List | python3 -c 'import sys; a=eval(sys.stdin.read()); print (a[0])' | jq '.[] | select(.wm_class_instance=="ghostty")'
   {
     "in_current_workspace": true,
     "wm_class": "com.mitchellh.ghostty",
@@ -107,7 +106,7 @@ from the autostart folder.
 ```
 $ start_win_at 10 10 ghostty --window-width=100 --window-height=50 --theme="Adwaita Dark"
 ```
-The script works for any application opening a single Window and has to
+The script works for any application opening a single window and has to
 1) wait for the Window Calls extension to be available on startup,
 2) start the application,
 3) find the window id as soon as the window is displayed, and
@@ -117,7 +116,7 @@ Note: There are extensions like [Another Window Session Manager](https://extensi
 that can restore window size and positions, but this is not the same like a clean startup configuration.
 
 To run an application when a GNOME session starts, a script like [terminal1.desktop](autostart/terminal1.desktop)
-has to be placed in the `.config/autostart` folder of the home directory. The command itself must be avaible in the shell `PATH`.
+has to be placed in the `.config/autostart` folder of the home directory. The command itself must be avaible in the shell `PATH` (add the scripts folder to the PATH).
 
 Note: It is also possible to manage startup-applications with the [gnome-tweaks](https://gitlab.gnome.org/GNOME/gnome-tweaks) tool.
 But on GNOME 4 gnome-tweaks has some issues and sometimes overrides old entries.
@@ -136,4 +135,13 @@ The script [fix_gtk3_win_resize](scripts/fix_gtk3_win_resize) waits for Mutter t
 available before the `SIGHUP` is send. To run this script when a GNOME session starts,
 the autostart script [fix_gtk3_win_resize.desktop](autostart/fix_gtk3_win_resize.desktop)
 has to be placed in the `.config/autostart` folder of the home directory.
+
+Fix appearance of gtk3 applications
+-----------------------------------
+GNOME 4 tries to provide the Look & Feel of gtk4 apps to old gtk3 apps and
+[snap](https://en.wikipedia.org/wiki/Snap_(software)) applications like Firefox & Thunderbird.
+One difference is that just the upper corners of the windows are rounded.
+
+To add rounded corners to all windows the [Rounded Window Corners Reborn](https://extensions.gnome.org/extension/7048/rounded-window-corners-reborn/)
+extension can be installed (see: https://github.com/flexagoon/rounded-window-corners).
 
