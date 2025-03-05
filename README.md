@@ -213,6 +213,6 @@ classic Ubuntu Mono font looks good in 12pt and 13pt sizes, but looks blurry wit
 
 size | classic Ubuntu Mono | 24.04 Ubuntu Mono
 -----|---------------------|-------------------
-12pt | ![](assets/ghostty_ubuntu2204_mono_classic_12pt(16px)_spc8x16.png) | ![](ghostty_ubuntu2404_mono_12pt(16px)_wght400(reg)_spc9x18.png)
+12pt | ![](assets/ghostty_ubuntu2204_mono_classic_12pt(16px)_spc8x16.png) | ![](assets/ghostty_ubuntu2404_mono_12pt(16px)_wght400(reg)_spc9x18.png)
 13pt | ![](assets/ghostty_ubuntu2204_mono_classic_13pt(17px)_spc9x18.png) | ![](assets/ghostty_ubuntu2404_mono_13pt(17px)_wght400(reg)_spc10x20.png)
 
