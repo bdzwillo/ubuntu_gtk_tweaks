@@ -17,7 +17,7 @@ GNOME Panel left                 | GNOME Panel right
 ---------------------------------|----------------------------------
 ![](assets/gnome_panel_left.png) | ![](assets/gnome_panel_right.png)
 
-Metacity is a gtk3 X11 window manager and will not support Wayland.
+Metacity is a [gtk3](https://docs.gtk.org/gtk3/) X11 window manager and will not support [Wayland](https://en.wikipedia.org/wiki/Wayland_(protocol)).
 The Metacity Window Manager is still available for Ubuntu 24.04. But
 to support modern apps and features the system was changed to use a
 gtk4 environment with a similar user experience to GNOME Flashback.
@@ -31,7 +31,7 @@ The best choice on Ubuntu 24.04 is GNOME Classic on Xorg. Even if Wayland
 is supposed to replace X11 in Linux, the GNOME Classic on Wayland session
 has still too many issues.
 
-- GNOME Panel has been replaced since GNOME 3 with [GNOME Shell](https://en.wikipedia.org/wiki/GNOME_Shell),
+- GNOME Panel has been replaced with [GNOME Shell](https://en.wikipedia.org/wiki/GNOME_Shell) in GNOME 4,
   which only works with the [Mutter window manager](https://en.wikipedia.org/wiki/Mutter_(software))
 
 - Mutter is not compatible with old GNOME Panel addons, but it is highly
@@ -60,7 +60,7 @@ The best solution for a single taskbar on a GNOME 4 desktop are the extensions:
   $ sudo apt install lm-sensors
   ```
 - to display the current weather next to the clock [Weather O'Clock](https://extensions.gnome.org/extension/5470/weather-oclock/)
-  replaces the old [GNOME Panel](https://gitlab.gnome.org/GNOME/gnome-applets) gweather applet.
+  replaces the old GNOME Panel [gweather applet](https://wiki.gnome.org/Projects/GnomeApplets).
   ```
   $ sudo apt install gnome-weather
   ```
@@ -133,7 +133,7 @@ see: [Mutter on X11 with Gnome 46, some windows no shadows, not resizable](https
 
 The script [fix_gtk3_win_resize](scripts/fix_gtk3_win_resize) waits for Mutter to be
 available before the `SIGHUP` is send. To run this script when a GNOME session starts,
-the autostart script [fix_gtk3_win_resize.desktop](autostart/fix_gtk3_win_resize.desktop)
+a autostart script like [fix_gtk3_win_resize.desktop](autostart/fix_gtk3_win_resize.desktop)
 has to be placed in the `.config/autostart` folder of the home directory.
 
 Fix appearance of gtk3 applications
@@ -144,4 +144,39 @@ One difference is that just the upper corners of the windows are rounded.
 
 To add rounded corners to all windows the [Rounded Window Corners Reborn](https://extensions.gnome.org/extension/7048/rounded-window-corners-reborn/)
 extension can be installed (see: https://github.com/flexagoon/rounded-window-corners).
+
+Improve font rendering in terminal emulator
+-------------------------------------------
+GNOME Classic uses the `DejaVu Sans Mono` font as standard 'Monospace' console font.
+```
+$ fc-match Monospace
+  DejaVuSansMono.ttf: "DejaVu Sans Mono" "Book"
+```
+The font-size and antialiasing can be changed in the gnone-tweaks font dialog. For a
+100dpi LCD screen a 13pt font-size and grayscale antialiasing seems to be the best choice
+for the GNOME 'Adwaita Dark' theme with light text on a dark background. The
+subpixel-antialiasing shows slight vertical color-shadows on some chars.
+
+grayscale antialiasing | subpixel antialiasing | no antialiasing
+-----------------------|-----------------------|-----------------
+![](assets/terminal_dejavu_sans_mono_regular_13pt(17px)_spc10x21_aa=grayscale.png) | ![](assets/terminal_dejavu_sans_mono_regular_13pt(17px)_spc10x21_aa=lcd.png) | ![](assets/terminal_dejavu_sans_mono_regular_13pt(17px)_spc10x21_aa=none.png)
+
+Another aspect which affects readability is the vertical space between text lines.
+In gnome-terminal the 13pt Monospace font uses a default cell-size of 10x21 pixel
+for each character. In the gnome-terminal Preferences dialog it is only possible to
+increase the cell-spacing of a selected custom font.
+
+Since the 13pt Monospace font uses a quite large vertical spacing, a reduction by
+1 pixel is reasonable. This can be accomplished by a different terminal emulator
+with more configuration options like [ghostty](https://ghostty.org/docs).
+```
+$ ghostty --theme="Adwaita Dark" --font-family="DejaVu Sans Mono" --font-size=13 --adjust-cell-height=0
+```
+DejaVu Sans Mono 13pt (10x20 cell) | DejaVu Sans Mono 12pt (10x19 cell)
+-----------------------------------|------------------------------------
+![](assets/ghostty_dejavu_sans_mono_regular_13pt(17px)_spc10x20.png) | ![](assets/ghostty_dejavu_sans_mono_regular_12pt(16px)_spc10x19.png)
+
+Using a terminal emulator with its own font rendering has also the advantage, that the
+global system settings do not affect the console font and can keep using subpixel-antialiasing
+(which looks better for proportional fonts).
 
