@@ -190,3 +190,29 @@ JetBrains Mono 12pt (10x22 cell) | JetBrains Mono 12pt (10x20 cell)
 -----------------------------------|--------------------------------
 ![](assets/ghostty_jetbrains_mono_12pt(16px)_spc10x22.png) | ![](assets/ghostty_jetbrains_mono_12pt(16px)_spc10x20.png)
 
+### Comparision with GNOME Flashback Ubuntu Mono fonts
+
+The old GNOME Flashback session used the `Ubuntu Mono` console font. This font is still
+available on Ubuntu 24.04, but it looks slightly different.
+
+[Ubuntu 24.04 updated the Ubuntu font family](https://discourse.ubuntu.com/t/ubuntu-24-04-lts-noble-numbat-release-notes/39890#p-99950-updated-ubuntu-font)
+to a slimmer version. The new terminal font has the same 'Ubuntu Mono' name as the old 2011
+font from Ubuntu 22.04 (see: [Ubuntu font](https://design.ubuntu.com/font) & [Ubuntu Sans Mono Font Family](https://github.com/canonical/ubuntu-sans-mono-fonts)).
+
+It is possible to switch back and forth between the current and the old console font
+from Ubuntu 22.04 (note that sometimes gnome-terminal shows just 'boxes' after the
+switch and a reboot is required).
+(see: [How to Restore the Old Fonts in Ubuntu 24.04 LTS](https://ubuntuhandbook.org/index.php/2023/04/restore-old-fonts-ubuntu-2304/))
+```
+$ sudo apt install fonts-ubuntu-classic
+$ sudo apt install fonts-ubuntu
+```
+The classic Ubuntu Mono font is smaller for the same font-size, and also uses a smaller
+cell-spacing. So terminal dimensions will differ when switching between the fonts. The
+classic Ubuntu Mono font looks good in 12pt and 13pt sizes, but looks blurry with 14pt.
+
+size | classic Ubuntu Mono | 24.04 Ubuntu Mono
+-----|---------------------|-------------------
+12pt | ![](assets/ghostty_ubuntu2204_mono_classic_12pt(16px)_spc8x16.png) | ![](ghostty_ubuntu2404_mono_12pt(16px)_wght400(reg)_spc9x18.png)
+13pt | ![](assets/ghostty_ubuntu2204_mono_classic_13pt(17px)_spc9x18.png) | ![](assets/ghostty_ubuntu2404_mono_13pt(17px)_wght400(reg)_spc10x20.png)
+
