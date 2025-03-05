@@ -147,14 +147,14 @@ extension can be installed (see: https://github.com/flexagoon/rounded-window-cor
 
 Improve font rendering in terminal emulator
 -------------------------------------------
-GNOME Classic uses the `DejaVu Sans Mono` font as standard 'Monospace' console font.
+GNOME Classic uses the `DejaVu Sans Mono` font as standard `Monospace` console font.
 ```
 $ fc-match Monospace
   DejaVuSansMono.ttf: "DejaVu Sans Mono" "Book"
 ```
 The font-size and antialiasing can be changed in the gnone-tweaks font dialog. For a
-100dpi LCD screen a 13pt font-size and grayscale antialiasing seems to be the best choice
-for the GNOME 'Adwaita Dark' theme with light text on a dark background. The
+100dpi IPS LCD screen a 13pt font-size and grayscale antialiasing seems to be the best choice
+for the GNOME `Adwaita Dark` theme with light text on a dark background. The
 subpixel-antialiasing shows slight vertical color-shadows on some chars.
 
 grayscale antialiasing | subpixel antialiasing | no antialiasing
@@ -178,5 +178,15 @@ DejaVu Sans Mono 13pt (10x20 cell) | DejaVu Sans Mono 12pt (10x19 cell)
 
 Using a terminal emulator with its own font rendering has also the advantage, that the
 global system settings do not affect the console font and can keep using subpixel-antialiasing
-(which looks better for proportional fonts).
+(which looks better for proportional fonts). ghostty uses grayscale-antialiasing as a default.
+
+For comparision the `JetBrains Mono` font which is [configured as the ghostty default font](https://ghostty.org/docs/config) is also a good console font. For the 12pt font ghostty uses
+a cell-size of 10x22 with a quite large vertical spacing. But this can easily be configured
+to use a cell-size of 10x20.
+```
+$ ghostty --theme="Adwaita Dark" --adjust-cell-height=-2
+```
+JetBrains Mono 12pt (10x22 cell) | JetBrains Mono 12pt (10x20 cell)
+-----------------------------------|--------------------------------
+![](assets/ghostty_jetbrains_mono_12pt(16px)_spc10x22.png) | ![](assets/ghostty_jetbrains_mono_12pt(16px)_spc10x20.png)
 
