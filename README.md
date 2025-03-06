@@ -8,7 +8,7 @@ In this scenario the target system is a PC with a single [GNOME Workspace](https
 100dpi screen. The screen provides enough horizontal space to work with a
 single taskbar which includes the active window list.
 
-In the past the system used the [GNOME Flashback](https://en.wikipedia.org/wiki/GNOME#GNOME_Flashback) desktop environment
+The old system setup used the [GNOME Flashback](https://en.wikipedia.org/wiki/GNOME#GNOME_Flashback) desktop environment
 on GNOME 3, which provides a similar look & feel to the preceeding GNOME 2 version.
 GNOME Flashback consists of the [Metacity Window Manager](https://wiki.gnome.org/Projects(2f)Metacity.html)
 and the [GNOME Panel](https://wiki.gnome.org/Projects(2f)GnomePanel.html) taskbar.
@@ -17,9 +17,9 @@ GNOME Panel left                 | GNOME Panel right
 ---------------------------------|----------------------------------
 ![](assets/gnome_panel_left.png) | ![](assets/gnome_panel_right.png)
 
-Metacity is a [gtk3](https://docs.gtk.org/gtk3/) X11 window manager and will not support [Wayland](https://en.wikipedia.org/wiki/Wayland_(protocol)).
-The Metacity Window Manager is still available for Ubuntu 24.04. But
-to support modern apps and features the system was changed to use a
+Metacity is still available for Ubuntu 24.04, but Metacity is a
+[gtk3](https://docs.gtk.org/gtk3/) X11 window manager and will not support [Wayland](https://en.wikipedia.org/wiki/Wayland_(protocol)), so this is a dead-end in the long term.
+To support modern apps and features the setup was changed to use a
 gtk4 environment with a similar user experience to GNOME Flashback.
 
 Switch from GNOME Flashback to GNOME 4 Classic
@@ -113,13 +113,14 @@ The script works for any application opening a single window and has to
 4) move the window to the requested position.
 
 Note: There are extensions like [Another Window Session Manager](https://extensions.gnome.org/extension/4709/another-window-session-manager/)
-that can restore window size and positions, but this is not the same like a clean startup configuration.
+that can restore the window size and position from the last session,
+but this is not the same like a clean startup configuration.
 
 To run an application when a GNOME session starts, a script like [terminal1.desktop](autostart/terminal1.desktop)
-has to be placed in the `.config/autostart` folder of the home directory. The command itself must be avaible in the shell `PATH` (add the scripts folder to the PATH).
+has to be placed in the `.config/autostart` folder of the home directory. The command itself must be avaible in the shell `PATH` (so the the scripts folder should be added to the PATH).
 
 Note: It is also possible to manage startup-applications with the [gnome-tweaks](https://gitlab.gnome.org/GNOME/gnome-tweaks) tool.
-But on GNOME 4 gnome-tweaks has some issues and sometimes overrides old entries.
+But on GNOME 4 gnome-tweaks has some issues and sometimes overrides old autostart entries.
 
 Workaround for broken gtk3 window resize
 ----------------------------------------
@@ -210,9 +211,15 @@ $ sudo apt install fonts-ubuntu
 The classic Ubuntu Mono font is smaller for the same font-size, and also uses a smaller
 cell-spacing. So terminal dimensions will differ when switching between the fonts. The
 classic Ubuntu Mono font looks good in 12pt and 13pt sizes, but looks blurry with 14pt.
-
+```
+$ ghostty --font-family="Ubuntu Mono" --theme="Adwaita Dark" --font-size=12 --font-variation=wght=400 --adjust-cell-height=0
+```
 size | classic Ubuntu Mono | 24.04 Ubuntu Mono
 -----|---------------------|-------------------
 12pt | ![](assets/ghostty_ubuntu2204_mono_classic_12pt(16px)_spc8x16.png) | ![](assets/ghostty_ubuntu2404_mono_12pt(16px)_wght400(reg)_spc9x18.png)
 13pt | ![](assets/ghostty_ubuntu2204_mono_classic_13pt(17px)_spc9x18.png) | ![](assets/ghostty_ubuntu2404_mono_13pt(17px)_wght400(reg)_spc10x20.png)
+
+The new 12pt Ubuntu Mono font matches the dimensions of the old 13pt classic Ubuntu Mono font
+when redered with a cell-size of 9x18. For some characters like the `t` in the screenshot
+the vertical lines of the new font appear too thin.
 
